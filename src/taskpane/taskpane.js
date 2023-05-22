@@ -5,32 +5,80 @@
 
 /* global console, document, Excel, Office */
 
+/**
+ * Your Excel.js business logic will be added to the function that is passed to Excel.run. This logic does not execute immediately. Instead, it is added to a queue of pending commands.
+ * The context.sync method sends all queued commands to Excel for execution.
+ * The tryCatch function will be used by all the functions interacting with the workbook from the task pane. Catching Office JavaScript errors in this fashion is a convenient way to generically handle any uncaught errors.
+ */
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
+    // Assign event handlers and other initialization logic.
+    document.getElementById("create-table").onclick = () => tryCatch(createTable);
   }
 });
 
-export async function run() {
+async function createTable() {
+  await Excel.run(async (context) => {
+    // 1. Queue table creation logic here.
+
+    /**
+     * The code creates a table by using the add method of a worksheet's table collection,
+     * which always exists even if it is empty. This is the standard way that Excel.js objects are created.
+     * There are no class constructor APIs, and you never use a new operator to create an Excel object.
+     * Instead, you add to a parent collection object.
+     */
+
+    /**
+     * The first parameter of the add method is the range of only the top row of the table,
+     * not the entire range the table will ultimately use. This is because when the add-in
+     * populates the data rows (in the next step), it will add new rows to the table instead of
+     * writing values to the cells of existing rows. This is a common pattern, because the number
+     * of rows a table will have is often unknown when the table is created.
+     */
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const expensesTable = currentWorksheet.tables.add("A1:D1", true /*hasHeaders*/);
+    expensesTable.name = "ExpensesTable";
+
+    // 2. Queue commands to populate the table with data.
+    /**
+     * The cell values of a range are set with an array of arrays.
+     * New rows are created in a table by calling the add method of the table's row collection.
+     * You can add multiple rows in a single call of add by including multiple cell value arrays
+     * in the parent array that is passed as the second parameter.
+     */
+    expensesTable.getHeaderRowRange().values = [["Date", "Merchant", "Category", "Amount"]];
+    expensesTable.rows.add(null /*add at the end*/, [
+      ["1/1/2017", "The Phone Company", "Communications", "120"],
+      ["1/2/2017", "Northwind Electric Cars", "Transportation", "142.33"],
+      ["1/5/2017", "Best For You Organics Company", "Groceries", "27.9"],
+      ["1/10/2017", "Coho Vineyard", "Restaurant", "33"],
+      ["1/11/2017", "Bellows College", "Education", "350.1"],
+      ["1/15/2017", "Trey Research", "Other", "135"],
+      ["1/15/2017", "Best For You Organics Company", "Groceries", "97.88"],
+    ]);
+
+    // 3. Queue commands to format the table.
+    /**
+     * The code gets a reference to the Amount column by passing its zero-based index to the getItemAt method of the table's column collection.
+     * The code then formats the range of the Amount column as Euros to the second decimal.
+     * Finally, it ensures that the width of the columns and height of the rows is big enough to fit the longest (or tallest) data item. Notice that the code must get Range objects to format. TableColumn and TableRow objects do not have format properties.
+     */
+    expensesTable.columns.getItemAt(3).getRange().numberFormat = [["\u20AC#,##0.00"]];
+    expensesTable.getRange().format.autofitColumns();
+    expensesTable.getRange().format.autofitRows();
+
+    await context.sync();
+  });
+}
+
+/** Default helper for invoking an action and handling errors. */
+async function tryCatch(callback) {
   try {
-    await Excel.run(async (context) => {
-      /**
-       * Insert your Excel code here
-       */
-      const range = context.workbook.getSelectedRange();
-
-      // Read the range address
-      range.load("address");
-
-      // Update the fill color
-      range.format.fill.color = "yellow";
-
-      await context.sync();
-      console.log(`The range address was ${range.address}.`);
-    });
+    await callback();
   } catch (error) {
+    // Note: In a production add-in, you'd want to notify the user through your add-in's UI.
     console.error(error);
   }
 }
