@@ -104,6 +104,21 @@ async function filterTable() {
 async function sortTable() {
   await Excel.run(async (context) => {
     // 1. Queue commands to sort the table by Merchant name.
+    /**
+     * The code creates an array of `SortField` objects, which has just one member since the add-in only sorts on the Merchant column.
+     * The `key` property of a `SortField` object is the zero-based index of the column used for sorting. The rows of the table are sorted based on the values in the referenced column.
+     * The `sort` member of a `Table` is a `TableSort` object, not a method. The `SortFields` are passed to the `TableSort` object's `apply` method.
+     */
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const expensesTable = currentWorksheet.tables.getItem("ExpensesTable");
+    const sortFields = [
+      {
+        key: 1, // Merchant column
+        ascending: false,
+      },
+    ];
+
+    expensesTable.sort.apply(sortFields);
 
     await context.sync();
   });
