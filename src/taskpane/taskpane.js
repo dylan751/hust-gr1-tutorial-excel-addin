@@ -1,3 +1,4 @@
+/* eslint-disable office-addins/load-object-before-read */
 /*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
@@ -10,6 +11,7 @@
  * The context.sync method sends all queued commands to Excel for execution.
  * The tryCatch function will be used by all the functions interacting with the workbook from the task pane. Catching Office JavaScript errors in this fashion is a convenient way to generically handle any uncaught errors.
  */
+
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
     document.getElementById("sideload-msg").style.display = "none";
@@ -17,6 +19,7 @@ Office.onReady((info) => {
     // Assign event handlers and other initialization logic.
     document.getElementById("create-table").onclick = () => tryCatch(createTable);
     document.getElementById("filter-table").onclick = () => tryCatch(filterTable);
+    document.getElementById("sort-table").onclick = () => tryCatch(sortTable);
   }
 });
 
@@ -77,11 +80,30 @@ async function createTable() {
 async function filterTable() {
   await Excel.run(async (context) => {
     // 1. Queue commands to filter out all expense categories except Groceries and Education.
+    /**
+     * The code first gets a reference to the column that needs filtering by passing the column name
+     *  to the getItem method, instead of passing its index to the getItemAt method as the createTable
+     *  method does. Since users can move table columns, the column at a given index might change after
+     * the table is created. Hence, it is safer to use the column name to get a reference to the column.
+     *  We used getItemAt safely in the preceding tutorial, because we used it in the very same method
+     *  that creates the table, so there is no chance that a user has moved the column.
+     */
+
+    /**
+     * The applyValuesFilter method is one of several filtering methods on the Filter object.
+     */
     const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
     const expensesTable = currentWorksheet.tables.getItem("ExpensesTable");
-    // eslint-disable-next-line office-addins/load-object-before-read
     const categoryFilter = expensesTable.columns.getItem("Category").filter;
     categoryFilter.applyValuesFilter(["Education", "Groceries"]);
+
+    await context.sync();
+  });
+}
+
+async function sortTable() {
+  await Excel.run(async (context) => {
+    // 1. Queue commands to sort the table by Merchant name.
 
     await context.sync();
   });
