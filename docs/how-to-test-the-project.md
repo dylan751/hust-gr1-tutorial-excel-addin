@@ -5,3 +5,7 @@
 2. In the task pane, choose the `Create Table` button.
 
 ![expected-output-image-1](../assets/how-to-test-the-project/excel-tutorial-create-table-2.png)
+
+3. Choose the `Filter Table` button and the `Sort Table` button, in either order.
+
+![expected-output-image-2](../assets/how-to-test-the-project/excel-tutorial-filter-and-sort-table-2.png)
