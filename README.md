@@ -20,6 +20,8 @@ This is the source code of an Excel Add-ins follow this [Microsoft's Excel Add-i
 ## How to run projects
 
 [Read this to setup and run the project](./docs/how-to-run-the-project.md)
+<br />
+[Read this to interact with the project](./docs/how-to-test-the-project.md)
 
 <!-- ROADMAP -->
 
