@@ -20,6 +20,7 @@ Office.onReady((info) => {
     document.getElementById("create-table").onclick = () => tryCatch(createTable);
     document.getElementById("filter-table").onclick = () => tryCatch(filterTable);
     document.getElementById("sort-table").onclick = () => tryCatch(sortTable);
+    document.getElementById("create-chart").onclick = () => tryCatch(createChart);
   }
 });
 
@@ -119,6 +120,34 @@ async function sortTable() {
     ];
 
     expensesTable.sort.apply(sortFields);
+
+    await context.sync();
+  });
+}
+
+async function createChart() {
+  await Excel.run(async (context) => {
+    // 1. Queue commands to get the range of data to be charted.
+    /**
+     * in order to exclude the header row, the code uses the Table.getDataBodyRange method
+     * to get the range of data you want to chart instead of the getRange method.
+     *
+     */
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const expensesTable = currentWorksheet.tables.getItem("ExpensesTable");
+    const dataRange = expensesTable.getDataBodyRange();
+
+    // 2. Queue command to create the chart and define its type.
+    const chart = currentWorksheet.charts.add("ColumnClustered", dataRange, "Auto");
+
+    // 3. Queue commands to position and format the chart.
+    chart.setPosition("A15", "F30");
+    chart.title.text = "Expenses";
+    chart.legend.position = "Right";
+    chart.legend.format.fill.setSolidColor("white");
+    chart.dataLabels.format.font.size = 15;
+    chart.dataLabels.format.font.color = "black";
+    chart.series.getItemAt(0).name = "Value in \u20AC";
 
     await context.sync();
   });
