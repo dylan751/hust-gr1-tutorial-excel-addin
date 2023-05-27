@@ -10,6 +10,16 @@
 
 ![expected-output-image-2](../assets/how-to-test-the-project/excel-tutorial-filter-and-sort-table-2.png)
 
-4. Choose the Create Chart button. A chart is created and only the data from the rows that have been filtered are included. The labels on the data points across the bottom are in the sort order of the chart; that is, merchant names in reverse alphabetical order.
+4. Choose the `Create Chart` button. A chart is created and only the data from the rows that have been filtered are included. The labels on the data points across the bottom are in the sort order of the chart; that is, merchant names in reverse alphabetical order.
 
 ![expected-output-image-3](../assets/how-to-test-the-project/excel-tutorial-create-chart-2.png)
+
+---
+
+5. Delete all the table (to start testing the next function)
+
+6. In the task pane, choose the `Create Table` button.
+
+7. In the task pane, choose the `Freeze Header` button.
+
+8. Scroll down the worksheet far enough to see that the table header remains visible at the top even when the higher rows scroll out of sight.

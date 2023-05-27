@@ -21,6 +21,7 @@ Office.onReady((info) => {
     document.getElementById("filter-table").onclick = () => tryCatch(filterTable);
     document.getElementById("sort-table").onclick = () => tryCatch(sortTable);
     document.getElementById("create-chart").onclick = () => tryCatch(createChart);
+    document.getElementById("freeze-header").onclick = () => tryCatch(freezeHeader);
   }
 });
 
@@ -163,6 +164,29 @@ async function createChart() {
     chart.dataLabels.format.font.size = 15;
     chart.dataLabels.format.font.color = "black";
     chart.series.getItemAt(0).name = "Value in \u20AC";
+
+    await context.sync();
+  });
+}
+
+/**
+ * When a table is long enough that a user must scroll to see some rows,
+ * the header row can scroll out of sight. In this step of the tutorial,
+ * you'll freeze the header row of the table that you created previously,
+ * so that it remains visible even as the user scrolls down the worksheet.
+ */
+async function freezeHeader() {
+  await Excel.run(async (context) => {
+    // 1. Queue commands to keep the header visible when the user scrolls.
+    /**
+     * The Worksheet.freezePanes collection is a set of panes in the worksheet
+     * that are pinned, or frozen, in place when the worksheet is scrolled.
+
+     * The freezeRows method takes as a parameter the number of rows, from the top, 
+     * that are to be pinned in place. We pass 1 to pin the first row in place.
+     */
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    currentWorksheet.freezePanes.freezeRows(1);
 
     await context.sync();
   });
