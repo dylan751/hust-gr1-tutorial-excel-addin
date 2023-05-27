@@ -9,3 +9,7 @@
 3. Choose the `Filter Table` button and the `Sort Table` button, in either order.
 
 ![expected-output-image-2](../assets/how-to-test-the-project/excel-tutorial-filter-and-sort-table-2.png)
+
+4. Choose the Create Chart button. A chart is created and only the data from the rows that have been filtered are included. The labels on the data points across the bottom are in the sort order of the chart; that is, merchant names in reverse alphabetical order.
+
+![expected-output-image-3](../assets/how-to-test-the-project/excel-tutorial-create-chart-2.png)
