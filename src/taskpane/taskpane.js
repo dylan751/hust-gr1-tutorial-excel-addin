@@ -131,16 +131,31 @@ async function createChart() {
     /**
      * in order to exclude the header row, the code uses the Table.getDataBodyRange method
      * to get the range of data you want to chart instead of the getRange method.
-     *
      */
     const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
     const expensesTable = currentWorksheet.tables.getItem("ExpensesTable");
     const dataRange = expensesTable.getDataBodyRange();
 
     // 2. Queue command to create the chart and define its type.
+    /**
+     * The first parameter to the add method specifies the type of chart. There are several dozen types.
+     * The second parameter specifies the range of data to include in the chart.
+     * The third parameter determines whether a series of data points from the table should be charted row-wise or column-wise. The option auto tells Excel to decide the best method.
+     */
     const chart = currentWorksheet.charts.add("ColumnClustered", dataRange, "Auto");
 
     // 3. Queue commands to position and format the chart.
+    /**
+     * The parameters to the setPosition method specify the upper left and
+     * lower right cells of the worksheet area that should contain the chart.
+     * Excel can adjust things like line width to make the chart look good in the space it has been given.
+     *
+     * A "series" is a set of data points from a column of the table.
+     * Since there is only one non-string column in the table, Excel infers that the column
+     * is the only column of data points to chart. It interprets the other columns as chart labels.
+     * So there will be just one series in the chart and it will have index 0.
+     * This is the one to label with "Value in €".
+     */
     chart.setPosition("A15", "F30");
     chart.title.text = "Expenses";
     chart.legend.position = "Right";
