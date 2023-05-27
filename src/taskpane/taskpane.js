@@ -192,6 +192,10 @@ async function freezeHeader() {
   });
 }
 
+/**
+ * Add a button to the ribbon that toggles worksheet protection on and off.
+ */
+
 /** Default helper for invoking an action and handling errors. */
 async function tryCatch(callback) {
   try {
