@@ -23,3 +23,30 @@
 7. In the task pane, choose the `Freeze Header` button.
 
 8. Scroll down the worksheet far enough to see that the table header remains visible at the top even when the higher rows scroll out of sight.
+
+---
+
+9. For the next step: Close all Office applications, including Excel (or close the browser tab if you're using Excel on the web).
+
+10. Clear the Office cache. This is necessary to completely clear the old version of the add-in from the client application. Instructions for this process are in the article [Clear the Office cache](https://learn.microsoft.com/en-us/office/dev/add-ins/testing/clear-cache).
+
+11. If the local web server is already running, stop it by entering the following command in the command prompt. This should close the node command window.
+
+```
+npm stop
+```
+
+12. Because your manifest file has been updated, you must sideload your add-in again, using the updated manifest file. Start the local web server and sideload your add-in.
+
+    1. To test your add-in in Excel, run the following command in the root directory of your project.
+
+    ```
+    npm start
+    ```
+
+13. On the `Home` tab in Excel, choose the `Toggle Worksheet Protection` button. Note that most of the controls on the ribbon are disabled (and visually grayed-out) as seen in the following screenshot.
+    ![ribbon-with-protection-on](../assets/how-to-test-the-project/excel-tutorial-ribbon-with-protection-on-2.png)
+
+14. Select a cell and try to edit its content. Excel displays an error message indicating that the worksheet is protected.
+
+15. Choose the `Toggle Worksheet Protection` button again, and the controls are reenabled, and you can change cell values again.

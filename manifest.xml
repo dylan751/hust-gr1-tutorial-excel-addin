@@ -71,7 +71,7 @@
                   on and off". But the resid should be "ProtectionButtonToolTip". -->
                   <Supertip>
                     <Title resid="ProtectionButtonLabel" />
-                    <Description resid="" />
+                    <Description resid="ProtectionButtonToolTip" />
                   </Supertip>
                   <Icon>
                     <bt:Image size="16" resid="Icon.16x16" />
