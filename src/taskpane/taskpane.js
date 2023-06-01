@@ -22,6 +22,7 @@ Office.onReady((info) => {
     document.getElementById("sort-table").onclick = () => tryCatch(sortTable);
     document.getElementById("create-chart").onclick = () => tryCatch(createChart);
     document.getElementById("freeze-header").onclick = () => tryCatch(freezeHeader);
+    document.getElementById("open-dialog").onclick = openDialog;
   }
 });
 
@@ -195,6 +196,27 @@ async function freezeHeader() {
 /**
  * Add a button to the ribbon that toggles worksheet protection on and off.
  */
+
+/**
+ * This variable is used to hold an object in the parent page's execution context
+ * that acts as an intermediator to the dialog page's execution context.
+ */
+let dialog = null;
+
+/**
+ * The important thing to notice about this code is what is not there: there is no call of Excel.run.
+ * This is because the API to open a dialog is shared among all Office applications,
+ * so it is part of the Office JavaScript Common API, not the Excel-specific API.
+ */
+function openDialog() {
+  // 1. Call the Office Common API that opens a dialog.
+  Office.context.ui.displayDialogAsync(
+    "https://localhost:3000/popup.html",
+    { height: 45, width: 55 }
+
+    // TODO2: Add callback parameter.
+  );
+}
 
 /** Default helper for invoking an action and handling errors. */
 async function tryCatch(callback) {
