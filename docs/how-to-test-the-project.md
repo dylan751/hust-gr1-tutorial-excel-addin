@@ -50,3 +50,15 @@ npm stop
 14. Select a cell and try to edit its content. Excel displays an error message indicating that the worksheet is protected.
 
 15. Choose the `Toggle Worksheet Protection` button again, and the controls are reenabled, and you can change cell values again.
+
+16. Delete all the result from the Excel
+
+17. Choose the `Open Dialog` button in the task pane.
+
+18. While the dialog is open, drag it and resize it. Note that you can interact with the worksheet and press other buttons on the task pane, but you cannot launch a second dialog from the same task pane page.
+
+19. In the dialog, enter a name and choose the `OK` button. The name appears on the task pane and the dialog closes.
+
+20. Optionally, in the `./src/taskpane/taskpane.js` file, comment out the line `dialog.close();` in the `processMessage` function. Then repeat the steps of this section. The dialog stays open and you can change the name. You can close it manually by pressing the X button in the upper right corner.
+
+![excel-tutorial-dialog-open-2](../assets/how-to-test-the-project/excel-tutorial-dialog-open-2.png)
