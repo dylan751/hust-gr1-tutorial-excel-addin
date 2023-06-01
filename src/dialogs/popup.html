@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <title>Dialog for My Office Add-in</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui. -->
+    <link
+      rel="stylesheet"
+      href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"
+    />
+
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- The markup loads a script named popup.js -->
+    <!-- It also loads the Office.js library-->
+    <script type="text/javascript" src="popup.js"></script>
+  </head>
+  <body style="display: flex; flex-direction: column; align-items: center; justify-content: center">
+    <!-- The page has an <input> field where the user will enter their name, and a button that will send this name to the task pane where it will display. -->
+    <p class="ms-font-xl">ENTER YOUR NAME</p>
+    <input id="name-box" type="text" /><br /><br />
+    <button id="ok-button" class="ms-Button">OK</button>
+  </body>
+</html>
