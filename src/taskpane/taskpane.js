@@ -208,14 +208,34 @@ let dialog = null;
  * This is because the API to open a dialog is shared among all Office applications,
  * so it is part of the Office JavaScript Common API, not the Excel-specific API.
  */
+
+/**
+ * The displayDialogAsync method opens a dialog in the center of the screen.
+ * The first parameter is the URL of the page to open.
+ * The second parameter passes options. height and width are percentages of the size of the Office application's window.
+ */
 function openDialog() {
   // 1. Call the Office Common API that opens a dialog.
   Office.context.ui.displayDialogAsync(
     "https://localhost:3000/popup.html",
-    { height: 45, width: 55 }
+    { height: 45, width: 55 },
 
-    // TODO2: Add callback parameter.
+    // 2. Add callback parameter.
+    /**
+     * The callback is executed immediately after the dialog successfully opens and before the user has taken any action in the dialog.
+     * The result.value is the object that acts as an intermediary between the execution contexts of the parent and dialog pages.
+     * The `processMessage` function will be created in a later step. This handler will process any values that are sent from the dialog page with calls of the `messageParent` function. result
+     */
+    function (result) {
+      dialog = result.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
+    }
   );
+}
+
+function processMessage(arg) {
+  document.getElementById("user-name").innerHTML = arg.message;
+  dialog.close();
 }
 
 /** Default helper for invoking an action and handling errors. */
